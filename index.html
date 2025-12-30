@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>勉強→ゲーム タイマー</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+
+</head>
+<body>
+
+<div class="container">
+  <div class="label">📚 勉強した時間</div>
+  <div id="study" class="time">0.0</div>
+
+  <div class="label">🎮 ゲームできる残り時間</div>
+  <div id="game" class="time game">0.0</div>
+
+  <div class="buttons">
+    <button id="studyBtn">勉強</button>
+    <button id="gameBtn">ゲーム</button>
+    <button id="stopBtn">停止</button>
+    <button id="resetBtn">リセット</button>
+  </div>
+</div>
+
+<script src="app.js" defer></script>
+<div class="rate">
+  <label>
+    勉強 → ゲーム倍率：
+    <span id="rateValue">1.0</span> 倍
+  </label>
+  <input
+    type="range"
+    id="rate"
+    min="0.5"
+    max="3"
+    step="0.1"
+    value="1"
+  >
+</div>
+<div class="label">
+  🏆 連続勉強：<span id="streak">0</span>回
+  （+<span id="bonus">0.0</span>）
+</div>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+</body>
+</html>
