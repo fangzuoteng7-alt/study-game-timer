@@ -1,6 +1,8 @@
 const studyDisplay = document.getElementById("study");
 const gameDisplay = document.getElementById("game");
 
+let studyLogs = JSON.parse(localStorage.getItem("studyLogs")) || [];
+
 let mode = null; // "study" or "game"
 let timerId = null;
 let lastTime = 0;
@@ -61,10 +63,33 @@ function start(newMode) {
   lastTime = Date.now();
   timerId = setInterval(update, 50);
 }
+function renderLogs() {
+  const logEl = document.getElementById("log");
+  logEl.innerHTML = "";
+
+  studyLogs.slice().reverse().forEach(log => {
+    const li = document.createElement("li");
+    li.textContent = `${log.date} ${log.time}｜${log.minutes}分`;
+    logEl.appendChild(li);
+  });
+}
 
 function stop() {
   clearInterval(timerId);
   timerId = null;
+    if (mode === "study" && currentStudySession >= 60 * 1000) {
+  const now = new Date();
+
+  const log = {
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    minutes: (currentStudySession / 60000).toFixed(1)
+  };
+
+  studyLogs.push(log);
+  localStorage.setItem("studyLogs", JSON.stringify(studyLogs));
+  renderLogs();
+}
 
   if (mode === "study") {
     if (currentStudySession >= 5 * 60 * 1000) { // 5分以上
@@ -93,3 +118,4 @@ document.getElementById("resetBtn").onclick = () => {
   studyDisplay.textContent = "0.0";
   gameDisplay.textContent = "0.0";
 };
+renderLogs();
